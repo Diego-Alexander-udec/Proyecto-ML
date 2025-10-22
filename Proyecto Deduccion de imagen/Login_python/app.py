@@ -1,15 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
+import os
+from dotenv import load_dotenv
+
+# Cargar variables de entorno
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'tu_clave_secreta'
+app.secret_key = os.getenv('SECRET_KEY', 'tu_clave_secreta_default')
 
-# Configuración de MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'flask_login'
+# Configuración de MySQL - usa variables de entorno para producción
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost')
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'root')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', '')
+app.config['MYSQL_DB'] = os.getenv('MYSQL_DB', 'flask_login')
+app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT', 3306))
 
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
@@ -98,7 +104,9 @@ def modelo_neural():
 def logout():
     session.pop('username', None)
     response = make_response(redirect(url_for('login')))
-    return add_no_cache_headers(response)  # Aplica las cabeceras de no caché
+    return add_no_cache_headers(response)
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.getenv('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
