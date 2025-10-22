@@ -59,3 +59,10 @@ urllib3==2.5.0
 watchdog==6.0.0
 wordcloud==1.9.4
 
+# Flask app dependencies (añadidos para el login con MySQL)
+Flask-MySQLdb==2.0.0
+Flask-Bcrypt==1.0.1
+mysqlclient==2.2.7
+python-dotenv==1.1.1
+PyMySQL==1.1.0
+
