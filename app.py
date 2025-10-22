@@ -1,4 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, make_response
+import pymysql
+
+# On some Windows environments mysqlclient (MySQLdb) is hard to build.
+# PyMySQL can act as a drop-in replacement if installed. Ensure the shim
+# is registered before importing/initializing flask_mysqldb.
+try:
+    pymysql.install_as_MySQLdb()
+except Exception:
+    pass
+
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
